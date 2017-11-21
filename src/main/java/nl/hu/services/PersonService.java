@@ -12,7 +12,8 @@ public class PersonService {
 
     public double calculateBmi(Person person) {
         double lengthInMeters = person.getLength()/100;
-        return person.getWeight() / (lengthInMeters*lengthInMeters);
+        lengthInMeters = person.getWeight() / (lengthInMeters*lengthInMeters);
+        return round(lengthInMeters, 1);
     }
 
     public int calculateCalorieIntake(Person person) {
@@ -48,6 +49,11 @@ public class PersonService {
             default:
                 return 1;
         }
+    }
+
+    private static double round (double value, int precision) {
+        int scale = (int) Math.pow(10, precision);
+        return (double) Math.round(value * scale) / scale;
     }
 
 }

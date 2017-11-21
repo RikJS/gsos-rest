@@ -1,5 +1,7 @@
 package nl.hu.controllers;
 
+import nl.hu.controllers.response.DoubleResponse;
+import nl.hu.controllers.response.IntegerResponse;
 import nl.hu.models.ActivityLevel;
 import nl.hu.models.Gender;
 import nl.hu.models.Person;
@@ -21,27 +23,24 @@ public class PersonController {
     private PersonService personService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/bmi/{weight}/{length}")
-    public Person getBmi(@PathVariable double weight, @PathVariable double length) {
+    public DoubleResponse getBmi(@PathVariable double weight, @PathVariable double length) {
         Person person = new Person(weight, length);
         double bmi = personService.calculateBmi(person);
-        person.setBmi(bmi);
-        return person;
+        return new DoubleResponse(bmi);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/calorieIntake/{weight}/{length}/{age}/{gender}/{activityLevel}")
-    public Person getCalorieIntake(@PathVariable double weight,
-                                   @PathVariable double length,
-                                   @PathVariable int age,
-                                   @PathVariable String gender,
-                                   @PathVariable String activityLevel) {
+    public IntegerResponse getCalorieIntake(@PathVariable double weight,
+                                            @PathVariable double length,
+                                            @PathVariable int age,
+                                            @PathVariable String gender,
+                                            @PathVariable String activityLevel) {
 
         Gender genderEnum = Gender.valueOf(gender.toUpperCase());
         ActivityLevel activityLevel1Enum = ActivityLevel.valueOf(activityLevel.toUpperCase());
         Person person = new Person(weight, length, age, genderEnum, activityLevel1Enum);
 
         int calorieIntake = personService.calculateCalorieIntake(person);
-        person.setCalorieIntake(calorieIntake);
-
-        return person;
+        return new IntegerResponse(calorieIntake);
     }
 }
